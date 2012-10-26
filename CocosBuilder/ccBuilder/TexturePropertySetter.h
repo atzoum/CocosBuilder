@@ -38,4 +38,7 @@
 + (void) setTtfForNode:(CCNode*)node andProperty:(NSString*) prop withFont:(NSString*) fontName;
 + (NSString*) ttfForNode:(CCNode*)node andProperty:(NSString*) prop;
 
++ (void) setAudioForNode:(CCNode*)node andProperty:(NSString*) prop withFile:(NSString*) audioFile;
+
+
 @end

@@ -62,6 +62,7 @@
     [propTypes addObject:@"String"];
     [propTypes addObject:@"BlockCCControl"];
     [propTypes addObject:@"FloatScale"];
+    [propTypes addObject:@"AudioFile"];
 }
 
 - (id) init
@@ -377,7 +378,8 @@
     }
     else if ([type isEqualToString:@"Texture"]
              || [type isEqualToString:@"FntFile"]
-             || [type isEqualToString:@"CCBFile"])
+             || [type isEqualToString:@"CCBFile"]
+             || [type isEqualToString:@"AudioFile"])
     {
         [self writeCachedString:prop isPath: YES];
     }
@@ -536,7 +538,8 @@
         }
         else if ([type isEqualToString:@"FntFile"]
                  || [type isEqualToString:@"Texture"]
-                 || [type isEqualToString:@"CCBFile"])
+                 || [type isEqualToString:@"CCBFile"]
+                 || [type isEqualToString:@"AudioFile"])
         {
             [self addToStringCache:value isPath:YES];
         }
@@ -786,7 +789,7 @@
             
             if (kfType == kCCBKeyframeTypeToggle && keyframes.count > 0)
             {
-                BOOL visible = YES;
+                BOOL toggleState = YES;
                 NSDictionary* keyframeFirst = [keyframes objectAtIndex:0];
                 if ([[keyframeFirst objectForKey:@"time"] floatValue] != 0)
                 {
@@ -801,8 +804,8 @@
                 for (NSDictionary* keyframe in keyframes)
                 {
                     float time = [[keyframe objectForKey:@"time"] floatValue];
-                    [self writeKeyframeValue:[NSNumber numberWithBool:visible] type:propType time:time easingType:kCCBKeyframeEasingInstant easingOpt:0];
-                    visible = !visible;
+                    [self writeKeyframeValue:[NSNumber numberWithBool:toggleState] type:propType time:time easingType:kCCBKeyframeEasingInstant easingOpt:0];
+                    toggleState = !toggleState;
                 }
                 
             }

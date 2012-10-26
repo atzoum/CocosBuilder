@@ -295,6 +295,13 @@
         [NodeGraphPropertySetter setNodeGraphForNode:node andProperty:name withFile:ccbFile parentSize:parentSize];
         [extraProps setObject:ccbFile forKey:name];
     }
+    else if ([type isEqualToString:@"AudioFile"])
+    {
+        NSString* audioFile = serializedValue;
+        if (!audioFile) audioFile = @"";
+        [TexturePropertySetter setAudioForNode:node andProperty:name withFile:audioFile];
+        [extraProps setObject:audioFile forKey:name];
+    }
     else
     {
         NSLog(@"WARNING Unrecognized property type: %@", type);

@@ -170,4 +170,11 @@
     return fntFile;
 }
 
++ (void) setAudioForNode:(CCNode*)node andProperty:(NSString*) prop withFile:(NSString*) audioFile
+{
+    NSString* filename = [[ResourceManager sharedManager] toAbsolutePath:audioFile];
+    [node setValue:filename forKey:prop];
+    [node setExtraProp:audioFile forKey:prop];
+}
+
 @end
