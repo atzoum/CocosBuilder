@@ -141,7 +141,11 @@ float ccbResolutionScale = 0;
         if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             // iPad
-            ccbResolutionScale = 2;
+            if ([[UIScreen mainScreen] scale] == 2.0) {
+                ccbResolutionScale = 2;
+            } else {
+                ccbResolutionScale = 1;
+            }
         }
         else
         {
