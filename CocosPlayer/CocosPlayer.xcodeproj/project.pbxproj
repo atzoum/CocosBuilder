@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58FD31F3163AA8E7003F575A /* CCActionManager+PausedTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FD31F1163AA8E7003F575A /* CCActionManager+PausedTarget.m */; };
+		58FD31F6163AA934003F575A /* CCBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FD31F4163AA934003F575A /* CCBAudio.m */; };
 		E3558B801627A4570095D16D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3558B7F1627A4570095D16D /* QuartzCore.framework */; };
 		E3558B821627A4570095D16D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3558B811627A4570095D16D /* OpenGLES.framework */; };
 		E3558B841627A4570095D16D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3558B831627A4570095D16D /* OpenAL.framework */; };
@@ -249,6 +251,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		58FD31F1163AA8E7003F575A /* CCActionManager+PausedTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCActionManager+PausedTarget.m"; sourceTree = "<group>"; };
+		58FD31F2163AA8E7003F575A /* CCActionManager+PausedTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCActionManager+PausedTarget.h"; sourceTree = "<group>"; };
+		58FD31F4163AA934003F575A /* CCBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBAudio.m; sourceTree = "<group>"; };
+		58FD31F5163AA934003F575A /* CCBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBAudio.h; sourceTree = "<group>"; };
 		E3558B7B1627A4570095D16D /* CocosPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocosPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3558B7F1627A4570095D16D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E3558B811627A4570095D16D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -858,6 +864,8 @@
 		E3558B911627A4570095D16D /* CocosPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				58FD31F4163AA934003F575A /* CCBAudio.m */,
+				58FD31F5163AA934003F575A /* CCBAudio.h */,
 				E3558E4C1627A45F0095D16D /* AppDelegate.h */,
 				E3558E4D1627A45F0095D16D /* AppDelegate.m */,
 				E3558E5C1627A6AF0095D16D /* PlayerStatusLayer.h */,
@@ -1681,6 +1689,8 @@
 		E3558E341627A45F0095D16D /* CocosBuilderReader */ = {
 			isa = PBXGroup;
 			children = (
+				58FD31F1163AA8E7003F575A /* CCActionManager+PausedTarget.m */,
+				58FD31F2163AA8E7003F575A /* CCActionManager+PausedTarget.h */,
 				E3558E351627A45F0095D16D /* CCBAnimationManager.h */,
 				E3558E361627A45F0095D16D /* CCBAnimationManager.m */,
 				E3558E381627A45F0095D16D /* CCBKeyframe.h */,
@@ -2070,6 +2080,8 @@
 				E3B351431628A0C400D8D432 /* mztools.c in Sources */,
 				E3B351441628A0C400D8D432 /* unzip.c in Sources */,
 				E3B351451628A0C400D8D432 /* zip.c in Sources */,
+				58FD31F3163AA8E7003F575A /* CCActionManager+PausedTarget.m in Sources */,
+				58FD31F6163AA934003F575A /* CCBAudio.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

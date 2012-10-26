@@ -30,11 +30,13 @@
     float time;
     int easingType;
     float easingOpt;
+    int type;
 }
 
 @property (nonatomic,retain) id value;
 @property (nonatomic,assign) float time;
 @property (nonatomic,assign) int easingType;
 @property (nonatomic,assign) float easingOpt;
+@property (nonatomic,assign) int type;
 
 @end

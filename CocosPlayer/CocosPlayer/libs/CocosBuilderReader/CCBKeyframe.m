@@ -26,6 +26,7 @@
 
 @implementation CCBKeyframe
 
+@synthesize type;
 @synthesize value;
 @synthesize time;
 @synthesize easingType;

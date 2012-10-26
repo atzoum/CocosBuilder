@@ -272,7 +272,8 @@
                                 [NSNumber numberWithFloat:y],
                                 [NSNumber numberWithInt:type],
                                 nil];
-                [actionManager setBaseValue:baseValue forNode:node propertyName:name];
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:baseValue ofType:type];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
@@ -323,7 +324,8 @@
                                 [NSNumber numberWithFloat:y],
                                 [NSNumber numberWithInt:type],
                                 nil];
-                [actionManager setBaseValue:baseValue forNode:node propertyName:name];
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:baseValue ofType:type];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
@@ -339,6 +341,7 @@
             
             if ([animatedProps containsObject:name])
             {
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:value ofType:type];
                 [actionManager setBaseValue:value forNode:node propertyName:name];
             }
         }
@@ -386,7 +389,8 @@
             
             if ([animatedProps containsObject:name])
             {
-                [actionManager setBaseValue:value forNode:node propertyName:name];
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:value ofType:type];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
@@ -421,7 +425,8 @@
             
             if ([animatedProps containsObject:name])
             {
-                [actionManager setBaseValue:spriteFrame forNode:node propertyName:name];
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:spriteFrame ofType:type];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
@@ -472,7 +477,8 @@
             
             if ([animatedProps containsObject:name])
             {
-                [actionManager setBaseValue:value forNode:node propertyName:name];
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:value ofType:type];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
@@ -490,7 +496,8 @@
             
             if ([animatedProps containsObject:name])
             {
-                [actionManager setBaseValue:cVal forNode:node propertyName:name];
+                CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:cVal ofType:type];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
@@ -712,6 +719,11 @@
             [node setValue:ccbFile forKey:name];
         }
     }
+    else if (type == kCCBPropTypeAudioFile)
+    {
+        NSString* audioFile = [self readCachedString];
+        [node setValue:audioFile forKey:name];
+    }
     else
     {
         NSLog(@"CCBReader: Failed to read property type %d",type);
@@ -723,6 +735,7 @@
     CCBKeyframe* keyframe = [[[CCBKeyframe alloc] init] autorelease];
     
     keyframe.time = [self readFloat];
+    keyframe.type = type;
     
     int easingType = [self readIntWithSign:NO];
     float easingOpt = 0;

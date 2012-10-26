@@ -239,10 +239,13 @@
         
         NSUInteger orientations = 0;
         
-        if ([[arr objectAtIndex:0] boolValue]) orientations |= UIInterfaceOrientationMaskPortrait;
-        if ([[arr objectAtIndex:1] boolValue]) orientations |= UIInterfaceOrientationMaskPortraitUpsideDown;
-        if ([[arr objectAtIndex:2] boolValue]) orientations |= UIInterfaceOrientationMaskLandscapeLeft;
-        if ([[arr objectAtIndex:3] boolValue]) orientations |= UIInterfaceOrientationMaskLandscapeRight;
+        if ([[arr objectAtIndex:0] boolValue]) orientations |= (1 << UIInterfaceOrientationPortrait);
+        if ([[arr objectAtIndex:1] boolValue]) orientations |= (1 << UIInterfaceOrientationPortraitUpsideDown);
+        if ([[arr objectAtIndex:2] boolValue]) orientations |= (1 << UIInterfaceOrientationLandscapeLeft);
+        if ([[arr objectAtIndex:3] boolValue]) orientations |= (1 << UIInterfaceOrientationLandscapeRight);
+
+        
+        
         
         [AppController appController].deviceOrientations = orientations;
     }

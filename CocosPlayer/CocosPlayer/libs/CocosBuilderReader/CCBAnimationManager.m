@@ -102,7 +102,7 @@
     }
 }
 
-- (void) setBaseValue:(id)value forNode:(CCNode*)node propertyName:(NSString*)propName
+- (void) setBaseValue:(CCBBaseValueTypePair*) value forNode:(CCNode*)node propertyName:(NSString*)propName
 {
     NSValue* nodePtr = [NSValue valueWithPointer:node];
     
@@ -117,7 +117,7 @@
     [props setObject:value forKey:propName];
 }
 
-- (id) baseValueForNode:(CCNode*) node propertyName:(NSString*) propName
+- (CCBBaseValueTypePair*) baseValueForNode:(CCNode*) node propertyName:(NSString*) propName
 {
     NSValue* nodePtr = [NSValue valueWithPointer:node];
     
@@ -154,9 +154,9 @@
     {
         return [CCBRotateTo actionWithDuration:duration angle:[kf1.value floatValue]];
     }
-    else if ([name isEqualToString:@"opacity"])
+    else if ([name isEqualToString:@"opacity"] || kf0.type == kCCBPropTypeByte )
     {
-        return [CCFadeTo actionWithDuration:duration opacity:[kf1.value intValue]];
+        return [CCBTweenByteTo actionWithProperty:name duration:duration value:[kf1.value intValue]];
     }
     else if ([name isEqualToString:@"color"])
     {
@@ -165,25 +165,19 @@
         
         return [CCTintTo actionWithDuration:duration red:c.r green:c.g blue:c.b];
     }
-    else if ([name isEqualToString:@"visible"])
+    else if ([name isEqualToString:@"visible"] || kf0.type == kCCBPropTypeCheck)
     {
-        if ([kf1.value boolValue])
-        {
-            return [CCSequence actionOne:[CCDelayTime actionWithDuration:duration] two:[CCShow action]];
-        }
-        else
-        {
-            return [CCSequence actionOne:[CCDelayTime actionWithDuration:duration] two:[CCHide action]];
-        }
+        return [CCSequence actionOne:[CCDelayTime actionWithDuration:duration] two:[CCBSetProperty actionWithPropertyName:name value:kf1.value]];
     }
     else if ([name isEqualToString:@"displayFrame"])
     {
-        return [CCSequence actionOne:[CCDelayTime actionWithDuration:duration] two:[CCBSetSpriteFrame actionWithSpriteFrame:kf1.value]];
+        return [CCSequence actionOne:[CCDelayTime actionWithDuration:duration] two:[CCBSetProperty actionWithPropertyName:name value:kf1.value]];
     }
     else if ([name isEqualToString:@"position"])
     {
         // Get position type
-        int type = [[[self baseValueForNode:node propertyName:name] objectAtIndex:2] intValue];
+        CCBBaseValueTypePair *valueTypePair = [self baseValueForNode:node propertyName:name];
+        int type = [[valueTypePair.value objectAtIndex:2] intValue];
         
         id value = kf1.value;
         
@@ -200,7 +194,8 @@
     else if ([name isEqualToString:@"scale"])
     {
         // Get position type
-        int type = [[[self baseValueForNode:node propertyName:name] objectAtIndex:2] intValue];
+        CCBBaseValueTypePair *valueTypePair = [self baseValueForNode:node propertyName:name];
+        int type = [[valueTypePair.value objectAtIndex:2] intValue];
         
         id value = kf1.value;
         
@@ -224,7 +219,7 @@
     return NULL;
 }
 
-- (void) setAnimatedProperty:(NSString*)name forNode:(CCNode*)node toValue:(id)value tweenDuration:(float) tweenDuration
+- (void) setAnimatedProperty:(NSString*)name forNode:(CCNode*)node toValue:(id)value tweenDuration:(float) tweenDuration type:(int) propType
 {
     if (tweenDuration > 0)
     {
@@ -232,7 +227,9 @@
         CCBKeyframe* kf1 = [[[CCBKeyframe alloc] init] autorelease];
         kf1.value = value;
         kf1.time = tweenDuration;
+        kf1.type = propType;
         kf1.easingType = kCCBKeyframeEasingLinear;
+        
         
         // Animate
         CCActionInterval* tweenAction = [self actionFromKeyframe0:NULL andKeyframe1:kf1 propertyName:name node:node];
@@ -245,7 +242,8 @@
         if ([name isEqualToString:@"position"])
         {
             // Get position type
-            int type = [[[self baseValueForNode:node propertyName:name] objectAtIndex:2] intValue];
+            CCBBaseValueTypePair *valueTypePair = [self baseValueForNode:node propertyName:name];
+            int type = [[valueTypePair.value objectAtIndex:2] intValue];
             
             // Get relative position
             float x = [[value objectAtIndex:0] floatValue];
@@ -256,7 +254,8 @@
         else if ([name isEqualToString:@"scale"])
         {
             // Get scale type
-            int type = [[[self baseValueForNode:node propertyName:name] objectAtIndex:2] intValue];
+            CCBBaseValueTypePair *valueTypePair = [self baseValueForNode:node propertyName:name];
+            int type = [[valueTypePair.value objectAtIndex:2] intValue];
             
             // Get relative scale
             float x = [[value objectAtIndex:0] floatValue];
@@ -278,15 +277,16 @@
     if (keyframes.count == 0)
     {
         // Use base value (no animation)
-        id baseValue = [self baseValueForNode:node propertyName:seqProp.name];
+        CCBBaseValueTypePair *valueTypePair = [self baseValueForNode:node propertyName:seqProp.name];
+        id baseValue = valueTypePair.value;
         NSAssert1(baseValue, @"No baseValue found for property (%@)", seqProp.name);
-        [self setAnimatedProperty:seqProp.name forNode:node toValue:baseValue tweenDuration:tweenDuration];
+        [self setAnimatedProperty:seqProp.name forNode:node toValue:baseValue tweenDuration:tweenDuration type:valueTypePair.type];
     }
     else
     {
         // Use first keyframe
         CCBKeyframe* keyframe = [keyframes objectAtIndex:0];
-        [self setAnimatedProperty:seqProp.name forNode:node toValue:keyframe.value tweenDuration:tweenDuration];
+        [self setAnimatedProperty:seqProp.name forNode:node toValue:keyframe.value tweenDuration:tweenDuration type:seqProp.type];
     }
 }
 
@@ -427,11 +427,12 @@
         {
             if (![seqNodePropNames containsObject:propName])
             {
-                id value = [nodeBaseValues objectForKey:propName];
+                CCBBaseValueTypePair *valueTypePair = [nodeBaseValues objectForKey:propName];
+                id value = valueTypePair.value;
                 
                 if (value)
                 {
-                    [self setAnimatedProperty:propName forNode:node toValue:value tweenDuration:tweenDuration];
+                    [self setAnimatedProperty:propName forNode:node toValue:value tweenDuration:tweenDuration type:valueTypePair.type];
                 }
             }
         }
@@ -533,40 +534,36 @@
 
 @end
 
-#pragma mark Custom Actions
 
-@implementation CCBSetSpriteFrame
-+(id) actionWithSpriteFrame: (CCSpriteFrame*) sf;
+
+@implementation CCBBaseValueTypePair
+
+@synthesize value = value_;
+@synthesize type = type_;
+
++ (id) baseValue:(id) value ofType:(int) type
 {
-	return [[[self alloc]initWithSpriteFrame:sf]autorelease];
+    return [[[CCBBaseValueTypePair alloc] initWithValue:value ofType:type] autorelease];
 }
 
--(id) initWithSpriteFrame: (CCSpriteFrame*) sf;
+- (id) initWithValue:(id) value ofType:(int) type
 {
-	if( (self=[super init]) )
-		spriteFrame = [sf retain];
-    
-	return self;
+    if ( (self = [super init]) ) {
+        self.value = value;
+        self.type = type;
+    }
+    return self;
 }
 
-- (void) dealloc
+-(void) dealloc
 {
-    [spriteFrame release];
+    [value_ release];
     [super dealloc];
 }
 
--(id) copyWithZone: (NSZone*) zone
-{
-	CCSpriteFrame *copy = [[[self class] allocWithZone: zone] initWithSpriteFrame:spriteFrame];
-	return copy;
-}
-
--(void) update:(ccTime)time
-{
-	((CCSprite *)target_).displayFrame = spriteFrame;
-}
-
 @end
+#pragma mark Custom Actions
+
 
 
 @implementation CCBRotateTo
@@ -621,3 +618,75 @@
 }
 @end
 
+@implementation CCBSetProperty
++(id) actionWithPropertyName: (NSString*) propertyName value:(id) value
+{
+	return [[[self alloc]initWithPropertyName:propertyName value:value] autorelease];
+}
+
+-(id) initWithPropertyName: (NSString*) propertyName value:(id) value
+{
+	if( (self=[super init]) ) {
+		propertyName_ = [propertyName retain];
+        value_ = [value retain];
+    }
+	return self;
+}
+
+- (void) dealloc
+{
+    [propertyName_ release];
+    [value_ release];
+    [super dealloc];
+}
+
+-(id) copyWithZone: (NSZone*) zone
+{
+    CCActionInstant *copy = [[[self class] allocWithZone: zone] initWithPropertyName:propertyName_ value:value_];
+	return copy;
+}
+
+-(void) update:(ccTime)time
+{
+	[target_ setValue:value_ forKey:propertyName_];
+}
+
+@end
+
+@implementation CCBTweenByteTo
+
++(id) actionWithProperty:(NSString*) propertyName duration:(ccTime)duration value:(GLubyte)val
+{
+    return [[[ self alloc] initWithProperty: propertyName duration:duration value:val] autorelease];
+}
+
+/** initializes the action with duration and value */
+-(id) initWithProperty:(NSString*) propertyName duration:(ccTime)duration value:(GLubyte)val
+{
+    if ( (self = [super initWithDuration:duration])) {
+        toValue_ = val;
+        propertyName_= [propertyName retain];
+    }
+    return self;
+}
+
+-(id) copyWithZone: (NSZone*) zone
+{
+	CCAction *copy = [[[self class] allocWithZone: zone] initWithProperty:propertyName_ duration:[self duration] value:toValue_];
+	return copy;
+}
+
+-(void) startWithTarget:(CCNode *)aTarget
+{
+	[super startWithTarget:aTarget];
+	fromValue_ = [[target_ valueForKey:propertyName_] charValue];
+}
+
+-(void) update: (ccTime) t
+{
+    [target_ setValue:[NSNumber numberWithChar:fromValue_ + ( toValue_ - fromValue_ ) * t] forKey:propertyName_];
+}
+
+
+
+@end

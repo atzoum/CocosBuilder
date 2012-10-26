@@ -56,7 +56,8 @@ enum {
     kCCBPropTypeCCBFile,
     kCCBPropTypeString,
     kCCBPropTypeBlockCCControl,
-    kCCBPropTypeFloatScale
+    kCCBPropTypeFloatScale,
+    kCCBPropTypeAudioFile
 };
 
 enum {

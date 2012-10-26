@@ -35,6 +35,19 @@
 
 @end
 
+@interface CCBBaseValueTypePair : NSObject
+{
+    id value_;
+    int type_;
+}
+@property (nonatomic,retain) id value;
+@property (nonatomic,assign) int type;
++ (id) baseValue:(id) value ofType:(int) type;
+- (id) initWithValue:(id) value ofType:(int) type;
+
+@end
+
+
 #pragma mark Action Manager
 
 @interface CCBAnimationManager : NSObject
@@ -78,7 +91,7 @@
 - (void) addNode:(CCNode*)node andSequences:(NSDictionary*)seq;
 - (void) moveAnimationsFromNode:(CCNode*)fromNode toNode:(CCNode*)toNode;
 
-- (void) setBaseValue:(id)value forNode:(CCNode*)node propertyName:(NSString*)propName;
+- (void) setBaseValue:(CCBBaseValueTypePair*) value forNode:(CCNode*)node propertyName:(NSString*)propName;
 
 - (void) runAnimationsForSequenceNamed:(NSString*)name tweenDuration:(float)tweenDuration;
 - (void) runAnimationsForSequenceNamed:(NSString*)name;
@@ -91,16 +104,6 @@
 @end
 
 #pragma mark Custom Animation Actions
-
-@interface CCBSetSpriteFrame : CCActionInstant <NSCopying>
-{
-	CCSpriteFrame* spriteFrame;
-}
-/** creates a Place action with a position */
-+(id) actionWithSpriteFrame: (CCSpriteFrame*) sf;
-/** Initializes a Place action with a position */
--(id) initWithSpriteFrame: (CCSpriteFrame*) sf;
-@end
 
 @interface CCBRotateTo : CCActionInterval <NSCopying>
 {
@@ -118,3 +121,33 @@
 @interface CCEaseInstant : CCActionEase <NSCopying>
 {}
 @end
+
+@interface CCBSetProperty : CCActionInstant
+{
+    NSString *propertyName_;
+    id value_;
+}
+/** creates a Place action with a position */
++(id) actionWithPropertyName: (NSString*) propertyName value:(id) value;
+/** Initializes a Place action with a position */
+-(id) initWithPropertyName: (NSString*) propertyName value:(id) value;
+
+// XXX Needed for BridgeSupport
+-(void) update:(ccTime)time;
+@end
+
+/** Fades an object that implements the CCRGBAProtocol protocol. It modifies the opacity from the current value to a custom one.
+ @warning This action doesn't support "reverse"
+ */
+@interface CCBTweenByteTo : CCActionInterval <NSCopying>
+{
+    GLubyte toValue_;
+	GLubyte fromValue_;
+    NSString *propertyName_;
+}
+/** creates an action with duration and value */
++(id) actionWithProperty:(NSString*) propertyName duration:(ccTime)duration value:(GLubyte)val;
+/** initializes the action with duration and value */
+-(id) initWithProperty:(NSString*) propertyName duration:(ccTime)duration value:(GLubyte)val;
+@end
+

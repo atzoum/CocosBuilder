@@ -53,7 +53,7 @@
     }
     else
     {
-        if (interfaceOrientation & [AppController appController].deviceOrientations) return YES;
+        if ((1 << interfaceOrientation) & [AppController appController].deviceOrientations) return YES;
         else return NO;
     }
 }
@@ -89,7 +89,7 @@ static AppController* appController = NULL;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     appController = self;
-    
+    [application setIdleTimerDisabled:YES];
     [self setStatus:kCCBStatusStringWaiting forceStop:NO];
     
     // Initalize custom file utils
