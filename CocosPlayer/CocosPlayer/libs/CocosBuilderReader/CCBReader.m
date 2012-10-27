@@ -29,6 +29,7 @@
 #import "CCBSequenceProperty.h"
 #import "CCBKeyframe.h"
 #import "CCNode+CCBRelativePositioning.h"
+#import "CCSprite+DoubleResolution.h"
 
 #ifdef CCB_ENABLE_UNZIP
 #import "SSZipArchive.h"
