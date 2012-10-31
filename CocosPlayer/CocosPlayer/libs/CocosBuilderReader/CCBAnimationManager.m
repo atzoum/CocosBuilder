@@ -428,11 +428,13 @@
             if (![seqNodePropNames containsObject:propName])
             {
                 CCBBaseValueTypePair *valueTypePair = [nodeBaseValues objectForKey:propName];
-                id value = valueTypePair.value;
+                if (valueTypePair) {
+                    id value = valueTypePair.value;
                 
-                if (value)
-                {
-                    [self setAnimatedProperty:propName forNode:node toValue:value tweenDuration:tweenDuration type:valueTypePair.type];
+                    if (value)
+                    {
+                        [self setAnimatedProperty:propName forNode:node toValue:value tweenDuration:tweenDuration type:valueTypePair.type];
+                    }
                 }
             }
         }

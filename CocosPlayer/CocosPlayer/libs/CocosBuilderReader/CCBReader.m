@@ -343,7 +343,7 @@
             if ([animatedProps containsObject:name])
             {
                 CCBBaseValueTypePair *valueTypePair = [CCBBaseValueTypePair baseValue:value ofType:type];
-                [actionManager setBaseValue:value forNode:node propertyName:name];
+                [actionManager setBaseValue:valueTypePair forNode:node propertyName:name];
             }
         }
     }
