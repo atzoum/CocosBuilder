@@ -22,11 +22,17 @@
  * THE SOFTWARE.
  */
 
-#import <Foundation/Foundation.h>
+#import "CCBModalSheetController.h"
+#import "cocos2d.h"
 
-@interface CCBFileUtil : NSObject
+@class ProjectSettings;
 
-+ (NSString*) toResolutionIndependentFile:(NSString*)file;
-+ (NSDate*) modificationDateForFile:(NSString*)file;
-+ (void) setModificationDate:(NSDate*)date forFile:(NSString*)file;
+@interface PublishSettingsWindow : CCBModalSheetController
+{
+    ProjectSettings* projectSettings;
+    IBOutlet NSArrayController* resDirArrayController;
+}
+
+@property (nonatomic,retain) ProjectSettings* projectSettings;
+
 @end
