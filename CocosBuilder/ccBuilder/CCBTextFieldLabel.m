@@ -10,20 +10,16 @@
 
 @implementation CCBTextFieldLabel
 
-- (id)initWithFrame:(NSRect)frame
+- (void) setEnabled: (BOOL) flag
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code here.
+    [super setEnabled: flag];
+    
+    if (flag == NO) {
+        [self setTextColor: [NSColor disabledControlTextColor]];
+    } else {
+        [self setTextColor: [NSColor controlTextColor]];
     }
     
-    return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-    // Drawing code here.
 }
 
 @end
