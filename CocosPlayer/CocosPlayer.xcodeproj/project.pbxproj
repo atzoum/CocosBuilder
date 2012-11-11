@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		584E3671163BF6510059436B /* CCActionManager+PausedTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 584E366E163BF6510059436B /* CCActionManager+PausedTarget.m */; };
-		584E3672163BF6510059436B /* CCBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 584E3670163BF6510059436B /* CCBAudio.m */; };
-		58BBF452163C117B004DC584 /* CCSprite+DoubleResolution.m in Sources */ = {isa = PBXBuildFile; fileRef = 58BBF451163C117B004DC584 /* CCSprite+DoubleResolution.m */; };
+		58B60EF4165009230004740A /* CCBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 584E3670163BF6510059436B /* CCBAudio.m */; };
+		58B60EF6165009250004740A /* CCActionManager+PausedTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 584E366E163BF6510059436B /* CCActionManager+PausedTarget.m */; };
+		58B60EF71650092A0004740A /* CCSprite+DoubleResolution.m in Sources */ = {isa = PBXBuildFile; fileRef = 58BBF451163C117B004DC584 /* CCSprite+DoubleResolution.m */; };
 		E3F6A04D16499A7600550B13 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F6A04C16499A7600550B13 /* QuartzCore.framework */; };
 		E3F6A04F16499A7600550B13 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F6A04E16499A7600550B13 /* OpenGLES.framework */; };
 		E3F6A05116499A7600550B13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F6A05016499A7600550B13 /* OpenAL.framework */; };
@@ -258,7 +258,7 @@
 		584E366F163BF6510059436B /* CCBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBAudio.h; sourceTree = "<group>"; };
 		584E3670163BF6510059436B /* CCBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBAudio.m; sourceTree = "<group>"; };
 		58BBF450163C117B004DC584 /* CCSprite+DoubleResolution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCSprite+DoubleResolution.h"; sourceTree = "<group>"; };
-		58BBF451163C117B004DC584 /* CCSprite+DoubleResolution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCSprite+DoubleResolution.m"; sourceTree = "<group>"; };		
+		58BBF451163C117B004DC584 /* CCSprite+DoubleResolution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCSprite+DoubleResolution.m"; sourceTree = "<group>"; };
 		E3F6A04816499A7600550B13 /* CocosPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocosPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3F6A04C16499A7600550B13 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E3F6A04E16499A7600550B13 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1709,7 +1709,7 @@
 				584E366D163BF6510059436B /* CCActionManager+PausedTarget.h */,
 				584E366E163BF6510059436B /* CCActionManager+PausedTarget.m */,
 				584E366F163BF6510059436B /* CCBAudio.h */,
-				584E3670163BF6510059436B /* CCBAudio.m */,				
+				584E3670163BF6510059436B /* CCBAudio.m */,
 				E3F6A30A16499A7E00550B13 /* CCBAnimationManager.h */,
 				E3F6A30B16499A7E00550B13 /* CCBAnimationManager.m */,
 				E3F6A30D16499A7E00550B13 /* CCBKeyframe.h */,
@@ -2093,6 +2093,9 @@
 				E3F6A39A16499DA500550B13 /* unzip.c in Sources */,
 				E3F6A39B16499DA500550B13 /* zip.c in Sources */,
 				E3F6A39C16499DA500550B13 /* SSZipArchive.m in Sources */,
+				58B60EF4165009230004740A /* CCBAudio.m in Sources */,
+				58B60EF6165009250004740A /* CCActionManager+PausedTarget.m in Sources */,
+				58B60EF71650092A0004740A /* CCSprite+DoubleResolution.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
