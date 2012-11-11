@@ -29,6 +29,10 @@
 #import "CCBKeyframe.h"
 #import "CCNode+CCBRelativePositioning.h"
 
+@interface CCBAnimationManager()
+
+@end
+
 @implementation CCBAnimationManager
 
 @synthesize sequences;
@@ -221,6 +225,10 @@
 
 - (void) setAnimatedProperty:(NSString*)name forNode:(CCNode*)node toValue:(id)value tweenDuration:(float) tweenDuration type:(int) propType
 {
+    [self setAnimatedProperty:name forNode:node toValue:value tweenDuration:tweenDuration type:propType tDiff:0];
+}
+- (void) setAnimatedProperty:(NSString*)name forNode:(CCNode*)node toValue:(id)value tweenDuration:(float) tweenDuration type:(int) propType tDiff:(float) tDiff
+{
     if (tweenDuration > 0)
     {
         // Create a fake keyframe to generate the action from
@@ -234,6 +242,10 @@
         // Animate
         CCActionInterval* tweenAction = [self actionFromKeyframe0:NULL andKeyframe1:kf1 propertyName:name node:node];
         [node runAction:tweenAction];
+        if (tDiff>0) {
+            [tweenAction step:0];
+            [tweenAction step:tDiff];
+        }
     }
     else
     {
@@ -359,6 +371,10 @@
 
 - (void) runActionsForNode:(CCNode*)node sequenceProperty:(CCBSequenceProperty*)seqProp tweenDuration:(float)tweenDuration
 {
+    [self runActionsForNode:node sequenceProperty:seqProp tweenDuration:tweenDuration tDiff:0];
+}
+- (void) runActionsForNode:(CCNode*)node sequenceProperty:(CCBSequenceProperty*)seqProp tweenDuration:(float)tweenDuration tDiff:(float) tDiff
+{
     NSArray* keyframes = [seqProp keyframes];
     int numKeyframes = (int)keyframes.count;
     
@@ -392,10 +408,18 @@
         
         CCSequence* seq = [CCSequence actionWithArray:actions];
         [node runAction:seq];
+        if (tDiff>0) {
+            [seq step:0];
+            [seq step:tDiff];
+        }
     }
 }
 
 - (void) runAnimationsForSequenceId:(int)seqId tweenDuration:(float) tweenDuration
+{
+    [self runAnimationsForSequenceId:seqId tweenDuration:tweenDuration tDiff:0];
+}
+- (void) runAnimationsForSequenceId:(int)seqId tweenDuration:(float) tweenDuration tDiff:(float) tDiff
 {
     NSAssert(seqId != -1, @"Sequence id %d couldn't be found",seqId);
     
@@ -442,9 +466,15 @@
     
     // Make callback at end of sequence
     CCBSequence* seq = [self sequenceFromSequenceId:seqId];
-    CCAction* completeAction = [CCSequence actionOne:[CCDelayTime actionWithDuration:seq.duration+tweenDuration] two:[CCCallFunc actionWithTarget:self selector:@selector(sequenceCompleted)]];
-    [rootNode runAction:completeAction];
+    float totalTime = seq.duration+tweenDuration;
     
+//    CCAction* completeAction = [CCSequence actionOne:[CCDelayTime actionWithDuration:totalTime] two:[CCCallFunc actionWithTarget:self selector:@selector(sequenceCompleted:)]];
+    CCAction* completeAction = [CCCallFuncWithDelay actionWithDelay:totalTime target:self selector:@selector(sequenceCompleted:)];
+    [rootNode runAction:completeAction];
+    if (tDiff>0) {
+        [completeAction step:0];
+        [completeAction step:tDiff];
+    }
     // Set the running scene
     runningSequence = [self sequenceFromSequenceId:seqId];
 }
@@ -460,8 +490,9 @@
     [self runAnimationsForSequenceNamed:name tweenDuration:0];
 }
 
-- (void) sequenceCompleted
+- (void) sequenceCompleted:(NSNumber*) diff
 {
+    //NSLog(@"diffTime: %f", [diff floatValue]);
     // Save last completed sequence
     if (lastCompletedSequenceName != runningSequence.name)
     {
@@ -479,7 +510,7 @@
     
     if (nextSeqId != -1)
     {
-        [self runAnimationsForSequenceId:nextSeqId tweenDuration:0];
+        [self runAnimationsForSequenceId:nextSeqId tweenDuration:0 tDiff:[diff floatValue]];
     }
     
 }
@@ -691,4 +722,59 @@
 
 
 
+@end
+
+@implementation CCCallFuncWithDelay
+
+@synthesize targetCallback = targetCallback_;
+
++(id) actionWithDelay:(ccTime) d target: (id) t selector:(SEL) s
+{
+	return [[[self alloc] initWithDelay: d target: t selector: s] autorelease];
+}
+
+-(id) initWithDelay:(ccTime) d target: (id) t selector:(SEL) s
+{
+	if( (self=[super initWithDuration:d]) ) {
+		self.targetCallback = t;
+		selector_ = s;
+	}
+	return self;
+}
+
+-(NSString*) description
+{
+	return [NSString stringWithFormat:@"<%@ = %p | Tag = %ld | selector = %@>",
+			[self class],
+			self,
+			(long)tag_,
+			NSStringFromSelector(selector_)
+			];
+}
+
+-(void) dealloc
+{
+	[targetCallback_ release];
+	[super dealloc];
+}
+
+-(id) copyWithZone: (NSZone*) zone
+{
+	CCActionInterval *copy = [[[self class] allocWithZone: zone] initWithDelay:duration_ target:targetCallback_ selector:selector_];
+	return copy;
+}
+
+-(void) update:(ccTime)time
+{
+    if (time==1) {
+        [self execute];
+    }
+}
+
+-(void) execute
+{
+    NSNumber *diff = [NSNumber numberWithFloat:elapsed_- duration_];
+    //NSLog(@"diff: %f",[diff floatValue]);
+	[targetCallback_ performSelector:selector_ withObject:diff];
+}
 @end

@@ -96,10 +96,11 @@
 - (void) runAnimationsForSequenceNamed:(NSString*)name tweenDuration:(float)tweenDuration;
 - (void) runAnimationsForSequenceNamed:(NSString*)name;
 - (void) runAnimationsForSequenceId:(int)seqId tweenDuration:(float) tweenDuration;
-
+- (void) runAnimationsForSequenceId:(int)seqId tweenDuration:(float) tweenDuration tDiff:(float) tDiff;
 -(void) setCompletedAnimationCallbackBlock:(void(^)(id sender))b;
 
 - (void) debug;
+- (void) sequenceCompleted:(NSNumber*) diff;
 
 @end
 
@@ -149,5 +150,23 @@
 +(id) actionWithProperty:(NSString*) propertyName duration:(ccTime)duration value:(GLubyte)val;
 /** initializes the action with duration and value */
 -(id) initWithProperty:(NSString*) propertyName duration:(ccTime)duration value:(GLubyte)val;
+@end
+
+@interface CCCallFuncWithDelay : CCActionInterval <NSCopying>
+{
+	id targetCallback_;
+	SEL selector_;
+}
+
+/** Target that will be called */
+@property (nonatomic, readwrite, retain) id targetCallback;
+
+/** creates the action with the callback */
++(id) actionWithDelay:(ccTime) delay target: (id) t selector:(SEL) s;
+/** initializes the action with the callback */
+-(id) initWithDelay:(ccTime) delay target: (id) t selector:(SEL) s;
+/** executes the callback */
+-(void) execute;
+
 @end
 
