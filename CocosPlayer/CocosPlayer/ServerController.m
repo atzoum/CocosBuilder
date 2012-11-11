@@ -242,7 +242,7 @@
     
     NSString* cmd = [msg objectForKey:@"cmd"];
     
-    //NSLog(@"cmd: %@", cmd);
+    NSLog(@"cmd: %@", cmd);
     
     if ([cmd isEqualToString:@"script"])
     {
